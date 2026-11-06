@@ -131,7 +131,7 @@ La capa Screenplay es propia y liviana (Actor, Ability, Performable, Question, C
 
 ## Escenarios automatizados
 
-Cinco clases de prueba independientes, una por escenario. Cada una crea sus propios datos y los elimina al terminar.
+Cinco casos de prueba independientes, uno por escenario, cada uno en su propia clase. Cada una crea sus propios datos y los elimina al terminar.
 
 | Escenario | Clase | Cómo se cumple |
 |---|---|---|
@@ -139,7 +139,7 @@ Cinco clases de prueba independientes, una por escenario. Cada una crea sus prop
 | **2. Payload dinámico con Builder Pattern** | [`DynamicBookingPayloadTest`](src/test/java/io/github/mike2599/booker/scenarios/DynamicBookingPayloadTest.java) | `Booking.builder()` (Lombok) con nombres, precio, depósito, fechas coherentes y necesidades generados por Datafaker. Sin JSON estáticos ni strings armados a mano. Valida **200 OK**, deserializa a `BookingResponse` y compara lo enviado contra lo devuelto y contra lo guardado (`GET /booking/{id}`) |
 | **3. Serialización, deserialización y GPath** | [`BookingSearchWithGPathTest`](src/test/java/io/github/mike2599/booker/scenarios/BookingSearchWithGPathTest.java) | `GET /booking` (lista general) validada con GPath (`bookingid`, `findAll { it.bookingid > 0 }`). Filtra por **`totalprice` mayor a un umbral aleatorio** con `findAll { it.totalprice > threshold }.bookingid` y extrae los IDs **sin bucles `for`**. Consulta uno y lo mapea a `Booking.class` con sus fechas anidadas como `LocalDate`. Ver la [decisión sobre la lista sin precios](#decisiones-sobre-el-enunciado) |
 | **4. Contrato, SLA y headers** | [`BookingContractSlaAndHeadersTest`](src/test/java/io/github/mike2599/booker/scenarios/BookingContractSlaAndHeadersTest.java) | `GET /booking/{id}` sobre una reserva existente: `matchesJsonSchemaInClasspath("schemas/booking.json")` con esquema **estricto** (campos obligatorios, tipos, formato de fechas, `additionalProperties: false`), `time(lessThan(2000L), MILLISECONDS)`, `Content-Type: application/json; charset=utf-8` exacto y presencia del header `Server` |
-| **5. Manejo negativo y edge cases** | [`NegativeAndEdgeCasesTest`](src/test/java/io/github/mike2599/booker/scenarios/NegativeAndEdgeCasesTest.java) | `PUT /booking/{id}` **sin token** y **con un token inválido** (prueba parametrizada): **403 Forbidden**, y además verifica que la reserva no cambió. `GET /booking/9999999`: **404 Not Found** |
+| **5. Manejo negativo y edge cases** | [`NegativeAndEdgeCasesTest`](src/test/java/io/github/mike2599/booker/scenarios/NegativeAndEdgeCasesTest.java) Una sola prueba con los pasos del enunciado: `PUT /booking/{id}` **sin token** y luego **con un token inválido**, ambos **403 Forbidden**. Verifica que la reserva no cambió y que `GET /booking/9999999` responde **404 Not Found** |
 
 ## Criterios de calidad
 
@@ -211,7 +211,7 @@ Ejecución local de referencia (Windows 11, JDK 21.0.13, Maven 3.9.16, 5 hilos):
 
 | Métrica | Resultado |
 |---|---|
-| Pruebas | **7 / 7 exitosas**: 5 escenarios, el 5 con 3 casos |
+| Pruebas | **5 / 5 exitosas**: un caso de prueba por escenario |
 | Duración | ~6,5 s de reloj frente a ~23 s de tiempo acumulado, gracias a la ejecución en paralelo |
 | Estabilidad | 3 ejecuciones seguidas sin fallos |
 | Ambientes | `qa` y `staging` en verde. Un ambiente inexistente detiene la ejecución con un mensaje claro |

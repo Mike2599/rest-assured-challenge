@@ -1,0 +1,22 @@
+# Maven
+target/
+
+# Resultados y reportes de Allure
+allure-results/
+allure-report/
+.allure/
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Variables locales
+.env

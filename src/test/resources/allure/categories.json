@@ -1,0 +1,27 @@
+[
+  {
+    "name": "SLA incumplido (tiempo de respuesta)",
+    "matchedStatuses": ["failed"],
+    "messageRegex": "(?s).*response time.*"
+  },
+  {
+    "name": "Contrato roto (JSON Schema)",
+    "matchedStatuses": ["failed"],
+    "messageRegex": "(?s).*(schema|Schema).*"
+  },
+  {
+    "name": "Código de estado inesperado",
+    "matchedStatuses": ["failed"],
+    "messageRegex": "(?s).*Expected status code.*"
+  },
+  {
+    "name": "Datos incoherentes entre lo enviado y lo recibido",
+    "matchedStatuses": ["failed"],
+    "messageRegex": "(?s).*Expected: .*"
+  },
+  {
+    "name": "API no disponible o error de red",
+    "matchedStatuses": ["broken"],
+    "messageRegex": "(?s).*(Connect|Timeout|UnknownHost|SocketException).*"
+  }
+]
